@@ -77,7 +77,7 @@
         </div>
         <div class="form-group">
         <label for="model">Model</label>
-        <select class="form-control selectpicker" name="model" id="model" data-live-search="true" autofocus>
+        <select class="form-control selectpicker" name="model" id="model" data-live-search="true" required>
           <option value="Pilih Model">Pilih Model</option>
           <option value="D1" data-tokens="D1">D1</option>
           <option value="D1 Moka" data-tokens="D1 Moka">D1 Moka</option>
