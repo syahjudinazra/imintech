@@ -6,6 +6,7 @@ Web Apps Sederhana Untuk Teknisi Mengelola Hardware Service
     <li>User membuat service baru</li>
     <li>User membuat service pending</li>
     <li>Update/View/Delete Data</li>
+    <li>Send Data ke Menu lain</li>
     <li>User dapat memindahkan data dari tabel service pending ke tabel service done</li>
     <li>User dapat meng eksport data table ke dalam file excel</li>
     <li>Fitur search untuk mencari data</li>
