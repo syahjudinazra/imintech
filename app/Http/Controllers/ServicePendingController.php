@@ -97,7 +97,7 @@ class ServicePendingController extends Controller
     public function show(Barangsp $barangsp)
     {
         return view('servicepending.show', [
-            'barangsp' => Barangsp::find($barangsp)
+            'barangsp' => Barangsp::find($barangsp)->where('id', $barangsp->id)
         ]);
         // $barangsp = Barangsp::find($barangsp);
         // return view('servicepending.show')->with('barangsp', $barangsp);
@@ -168,7 +168,7 @@ class ServicePendingController extends Controller
     //move data table
     public function finish(Request $request, Barangsp $barangsp){
     //    echo $barangsp->id;
-       $user = DB::table('barangsps')->where('id', ''. $barangsp->id .'')->first();
+       $barangsp = DB::table('barangsps')->where('id', ''. $barangsp->id .'')->first();
 
     //    echo $user->serialnumber;
     DB::table('barangs')->insert(

@@ -125,7 +125,7 @@ class ServiceDoneController extends Controller
     {
 
         return view('servicedone.show', [
-                'barang' => Barang::find($barang)
+                'barang' => Barang::find($barang)->where('id', $barang->id)
             ]);
         // $barang = Barang::find($barang);
         // return view('servicedone.show')->with('barang', $barang);

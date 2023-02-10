@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -9,7 +10,7 @@ use App\Models\Kanibal;
 
 use App\Exports\KanibalExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Controllers\Controller;
+
 
 class KanibalController extends Controller
 {
@@ -94,21 +95,22 @@ class KanibalController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show(Kanibal $kanibal)
     {
 
         return view('kanibal.show', [
-            'kanibal' => Kanibal::find($kanibal)
+            'kanibal' => Kanibal::find($kanibal)->where('id', $kanibal->id)
         ]);
-        // $kanibal = Kanibal::find($kanibal);
+        // $kanibal = Kanibal::find('id');
         // return view('kanibal.show')->with('kanibal', $kanibal);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kanibal  $kanibal
      * @return \Illuminate\Http\Response
      */
     public function edit(Kanibal $kanibal)
@@ -165,7 +167,7 @@ class KanibalController extends Controller
     public function finish(Request $request, Kanibal $kanibal)
     {
         //    echo $kanibal->id;
-        $user = DB::table('kanibals')->where('id', '' . $kanibal->id . '')->first();
+        $kanibal = DB::table('kanibals')->where('id', '' . $kanibal->id . '')->first();
 
         //    echo $user->serialnumber;
         DB::table('barangs')->insert(

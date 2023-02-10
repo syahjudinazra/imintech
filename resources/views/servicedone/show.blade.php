@@ -54,7 +54,7 @@
         <form method="post" action="/servicedone">
         @csrf
 
-        <button class="btn btn-outline-danger mb-4" id="copyBtn" data-text="*Tanggal :* {{ $produk->tanggal }} | *SerialNumber : {{ $produk->serialnumber }} | *Pelanggan :* {{ $produk->pelanggan }} | *Model :* {{ $produk->model }} | *RAM/Storage :* {{ $produk->ram }} | *Versi Android :* {{ $produk->android }} | *Kerusakan :* {{ $produk->kerusakan }} |  *Kerusakan Bawaan :* {{ $produk->kerusakanbawaan }} | *Teknisi :* {{ $produk->teknisi }} | *Perbaikan :* {{ $produk->perbaikan }} | *SNKanibal :* {{ $produk->snkanibal }} | *No SparePart :* {{ $produk->nosparepart }} | *Note :* {{ $produk->note }}">
+        <button class="btn btn-outline-danger mb-4" id="copyBtn" data-text=" *SerialNumber :* {{ $produk->serialnumber }} | *Pelanggan :* {{ $produk->pelanggan }} | *Model :* {{ $produk->model }} | *Kerusakan :* {{ $produk->kerusakan }} | *Teknisi :* {{ $produk->teknisi }} | *Perbaikan :* {{ $produk->perbaikan }}">
             Copy Data</button>
 
         <div class="form-group">

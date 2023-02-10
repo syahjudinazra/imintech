@@ -54,7 +54,7 @@
         <form method="post" action="/kanibal">
         @csrf
 
-        <button class="btn btn-outline-danger mb-4" id="copyBtn" data-text="*Tanggal :* {{ $detail->tanggal }} | *SerialNumber : {{ $detail->serialnumber }} | *Pelanggan :* {{ $detail->pelanggan }} | *Model :* {{ $detail->model }} | *RAM/Storage :* {{ $detail->ram }} | *Versi Android :* {{ $detail->android }} | *Kerusakan :* {{ $detail->kerusakan }} |  *Kerusakan Bawaan :* {{ $detail->kerusakanbawaan }} | *Teknisi :* {{ $detail->teknisi }} | *Perbaikan :* {{ $detail->perbaikan }} | *SNKanibal :* {{ $detail->snkanibal }} | *No SparePart :* {{ $detail->nosparepart }} | *Note :* {{ $detail->note }}">
+        <button class="btn btn-outline-danger mb-4" id="copyBtn" data-text=" *SerialNumber :* {{ $detail->serialnumber }} | *Pelanggan :* {{ $detail->pelanggan }} | *Model :* {{ $detail->model }} | *Kerusakan :* {{ $detail->kerusakan }} | *Teknisi :* {{ $detail->teknisi }} | *Perbaikan :* {{ $detail->perbaikan }}">
             Copy Data</button>
 
         <div class="form-group">
@@ -91,6 +91,11 @@
           <label for="kerusakan">Kerusakan</label>
           <input type="text" class="form-control" id="kerusakan" name="kerusakan" placeholder="Masukan Kerusakan" value="{{ old('kerusakan', $detail->kerusakan) }}" disabled>
         </div>
+        <div class="form-group">
+            <label for="kerusakanbawaan">Kerusakan Bawaan</label>
+            <input type="text" class="form-control" id="kerusakanbawaan"
+            name="kerusakanbawaan" placeholder="Masukan Nama kerusakanbawaan" value="{{ old('kerusakanbawaan', $detail->kerusakanbawaan) }}" disabled>
+          </div>
         <div class="form-group">
           <label for="teknisi">Teknisi</label>
           <input type="text" class="form-control" id="teknisi"
