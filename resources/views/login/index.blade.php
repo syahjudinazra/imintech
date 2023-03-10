@@ -25,7 +25,7 @@
 
           <label for="password" class="sr-only">Password</label>
           <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
-          
+
           <a href="#" class="float-right">Forgot Password?</a>
         <button class="btn btn-lg btn-danger btn-block mt-5" type="submit">Login</button>
     </form>

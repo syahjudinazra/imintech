@@ -88,15 +88,20 @@
           name="android" placeholder="Masukan Nama Android" value="{{ old('android', $produk->android) }}" disabled>
         </div>
         <div class="form-group">
+            <label for="garansi">Garansi</label>
+            <input type="text" class="form-control" id="garansi"
+            name="garansi" placeholder="Masukan Nama garansi" value="{{ old('garansi', $produk->garansi) }}" disabled>
+        </div>
+        <div class="form-group">
           <label for="kerusakan">Kerusakan</label>
           <input type="text" class="form-control" id="kerusakan" name="kerusakan" placeholder="Masukan Kerusakan" value="{{ old('kerusakan', $produk->kerusakan) }}" disabled>
         </div>
 
-        <div class="form-group">
+        {{-- <div class="form-group">
           <label for="kerusakanbawaan">Kerusakan Bawaan</label>
           <input type="text" class="form-control" id="kerusakanbawaan"
           name="kerusakanbawaan" placeholder="Masukan Nama kerusakanbawaan" value="{{ old('kerusakanbawaan', $produk->kerusakanbawaan) }}" disabled>
-        </div>
+        </div> --}}
 
         <div class="form-group">
           <label for="teknisi">Teknisi</label>
@@ -117,7 +122,7 @@
         </div>
         <div class="form-group">
           <label for="note">Note</label>
-          <input type="text" class="form-control" id="note" name="note" placeholder="Masukan Note" value="{{ old('note', $produk->note) }}" disabled>
+          <textarea type="text" class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Masukan Note" readonly>{{ $produk->note }}</textarea>
         </div>
       </form>
       @endforeach

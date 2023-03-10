@@ -147,12 +147,21 @@
           <option value="Android 11 GMS" {{ $barangsp->android == "Android 11 GMS" ? 'selected' : '' }} >Android 11 GMS</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="garansi">Garansi</label>
+        <select class="form-control" id="garansi" name="garansi">
+          <option value="">Pilih Garansi</option>
+          <option value="DOA (Garansi)"{{ $barangsp->garansi == "DOA (Garansi)" ? 'selected' : '' }}>DOA (Garansi)</option>
+          <option value="RMA (Garansi)" {{ $barangsp->garansi == "RMA (Garansi)" ? 'selected' : '' }}>RMA (Garansi)</option>
+          <option value="RMA (Tidak Garansi)" {{ $barangsp->garansi == "RMA (Tidak Garansi)" ? 'selected' : '' }}>RMA (Tidak Garansi)</option>
+        </select>
+      </div>
         <div class="form-group">
           <label for="kerusakan">Kerusakan</label>
           <input type="text" class="form-control" id="kerusakan" name="kerusakan" placeholder="Masukan Kerusakan" value="{{ old('kerusakan', $barangsp->kerusakan) }}">
         </div>
 
-        <div class="form-group">
+        {{-- <div class="form-group">
         <label for="kerusakanbawaan">Kerusakan Bawaan</label>
             <div class="btn-group btn-group-toggle product-options" data-toggle="buttons">
                 <label class="btn btn-outline-success active">
@@ -164,7 +173,7 @@
                     value="0" autocomplete="off" checked> No
                 </label>
             </div>
-        </div>
+        </div> --}}
 
         <div class="form-group">
         <label for="teknisi">Teknisi</label>
@@ -190,7 +199,7 @@
         </div>
         <div class="form-group">
           <label for="note">Note</label>
-          <input type="text" class="form-control" id="note" name="note" placeholder="Masukan Note" value="{{ old('note', $barangsp->note) }}">
+          <textarea type="text" class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Masukan Note">{{ $barangsp->note }}</textarea>
         </div>
         <button type="submit" class="btn btn-danger mb-5">Ubah Data</button>
         {{-- <!-- <a href="/servicepending/finish/{{ $barangsp->id }}"

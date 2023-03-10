@@ -21,6 +21,7 @@ class CreateKanibalsTable extends Migration
             $table->string('model');
             $table->string('ram')->nullable();
             $table->string('android')->nullable();
+            $table->string('garansi')->nullable();
             $table->string('kerusakan');
             $table->boolean('kerusakanbawaan')->default(0);
             $table->string('teknisi');

@@ -150,12 +150,21 @@
           <option>Android 11 GMS</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="garansi">Garansi</label>
+        <select class="form-control" id="garansi" name="garansi" value="{{ old('garansi') }}" required>
+          <option>Pilih Garansi</option>
+          <option>DOA (Garansi)</option>
+          <option>RMA (Garansi)</option>
+          <option>RMA (Tidak Garansi)</option>
+        </select>
+      </div>
         <div class="form-group">
           <label for="kerusakan">Kerusakan</label>
           <input type="text" class="form-control" id="kerusakan" name="kerusakan" placeholder="Masukan Kerusakan" value="{{ old('kerusakan') }}">
         </div>
 
-        <div class="form-group">
+        {{-- <div class="form-group">
         <label for="kerusakanbawaan">Kerusakan Bawaan</label>
             <div class="btn-group btn-group-toggle product-options" data-toggle="buttons">
                 <label class="btn btn-outline-success active">
@@ -165,7 +174,7 @@
                     <input type="radio" name="kerusakanbawaan" id="kerusakanbawaan" value="0" autocomplete="off" checked> No
                 </label>
             </div>
-        </div>
+        </div> --}}
 
         <div class="form-group">
         <label for="teknisi">Teknisi</label>
@@ -191,7 +200,7 @@
         </div>
         <div class="form-group">
           <label for="note">Note</label>
-          <input type="text" class="form-control" id="note" name="note" placeholder="Masukan Note" value="{{ old('note') }}">
+          <textarea type="text" class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Masukan Note">{{ old('note') }}</textarea>
         </div>
         <button type="submit" class="btn btn-danger mb-5">Tambah Data</button>
       </form>

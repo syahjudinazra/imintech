@@ -18,6 +18,7 @@ class Barangsp extends Model
         'model',
         'ram',
         'android',
+        'garansi',
         'kerusakan',
         'kerusakanbawaan',
         'teknisi',

@@ -22,7 +22,7 @@ class ServicePendingExport implements FromCollection, WithHeadings
     {
         return
         [
-            "no", "tanggal", "serialnumber", "pelanggan", "model", "ram", "android", "kerusakan", "kerusakanbawaan",
+            "no", "tanggal", "serialnumber", "pelanggan", "model", "ram", "android", "garansi", "kerusakan", "kerusakanbawaan",
             "teknisi", "perbaikan", "snkanibal", "nosparepart", "note",
         ];
     }
