@@ -14,7 +14,9 @@ class SparepartsController extends Controller
      */
     public function index()
     {
-        return Spareparts::all();
+        $spareParts = Spareparts::all();
+
+        return response()->json(['data' => $spareParts]);
     }
 
     /**
@@ -31,8 +33,8 @@ class SparepartsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nospareparts' => 'required|max:255',
-            'sparepartsdevice_id' => 'required|exists:devices,id',
+            'nosparepart' => 'required|max:255',
+            'sparepartsdevice_id' => 'required',
             'nama' => 'required|max:255',
             'quantity' => 'required|numeric',
             'harga' => 'required|numeric',
@@ -41,7 +43,7 @@ class SparepartsController extends Controller
         try {
             // Create a new Spareparts instance
             $spareParts = new Spareparts();
-            $spareParts->nospareparts = $request->input('nospareparts');
+            $spareParts->nosparepart = $request->input('nosparepart');
             $spareParts->nama = $request->input('nama');
             $spareParts->quantity = $request->input('quantity');
             $spareParts->harga = $request->input('harga');
@@ -59,6 +61,7 @@ class SparepartsController extends Controller
             return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage(), 'status' => false], 500);
         }
     }
+
 
     /**
      * Display the specified resource.

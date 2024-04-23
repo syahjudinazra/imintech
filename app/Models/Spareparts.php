@@ -16,14 +16,14 @@ class Spareparts extends Model
 
     protected $fillable = [
         'nospareparts',
-        'tipe',
+        'sparepartsdevice_id',
         'nama',
         'quantity',
         'harga',
     ];
 
-    public function device()
+    public function sparepartsdevice()
     {
-        return $this->belongsTo(SparepartsDevice::class, 'sparepartsdevice_id');
+        return $this->belongsTo(SparepartsDevice::class);
     }
 }

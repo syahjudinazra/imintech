@@ -18,9 +18,9 @@ class SparepartsDevice extends Model
         'name',
     ];
 
-
     public function spareparts()
     {
-        return $this->hasMany(Spareparts::class, 'sparepartsdevice_id');
+        return $this->hasOne(Spareparts::class);
     }
+
 }

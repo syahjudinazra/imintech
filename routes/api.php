@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\SparepartsController;
+use App\Http\Controllers\SparepartsDeviceController;
 
 /**Authentication */
 Route::get('/user', function (Request $request) {
@@ -17,4 +18,6 @@ Route::post('/login', LoginController::class)->name('login');
 Route::post('/logout', LogoutController::class)->name('logout');
 
 /**Spareparts */
+Route::get('/getspareparts', [SparepartsController::class, 'index']);
 Route::post('/spareparts', [SparepartsController::class, 'store'])->name('add.spareparts');
+Route::get('/sparepartsdevice', [SparepartsDeviceController::class, 'index']);
