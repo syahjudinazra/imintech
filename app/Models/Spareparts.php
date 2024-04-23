@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Spareparts extends Model
@@ -22,7 +23,7 @@ class Spareparts extends Model
         'harga',
     ];
 
-    public function sparepartsdevice()
+    public function SparepartsDevice(): BelongsTo
     {
         return $this->belongsTo(SparepartsDevice::class);
     }

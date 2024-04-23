@@ -14,7 +14,7 @@ class SparepartsController extends Controller
      */
     public function index()
     {
-        $spareParts = Spareparts::all();
+        $spareParts = Spareparts::with('SparepartsDevice')->latest()->get();
 
         return response()->json(['data' => $spareParts]);
     }
@@ -44,16 +44,13 @@ class SparepartsController extends Controller
             // Create a new Spareparts instance
             $spareParts = new Spareparts();
             $spareParts->nosparepart = $request->input('nosparepart');
+            $spareParts->sparepartsdevice_id = $request->input('sparepartsdevice_id');
             $spareParts->nama = $request->input('nama');
             $spareParts->quantity = $request->input('quantity');
             $spareParts->harga = $request->input('harga');
 
             // Save the Spareparts instance
             $spareParts->save();
-
-            // Associate the Spareparts with the corresponding Device
-            $device = SparepartsDevice::findOrFail($request->input('sparepartsdevice_id'));
-            $device->spareparts()->save($spareParts);
 
             return response()->json(['message' => 'Data berhasil ditambahkan', 'status' => true]);
         } catch (\Exception $e) {
