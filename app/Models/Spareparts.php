@@ -16,15 +16,15 @@ class Spareparts extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'nospareparts',
-        'sparepartsdevice_id',
+        'nosparepart',
+        'tipe',
         'nama',
         'quantity',
         'harga',
     ];
 
-    public function SparepartsDevice(): BelongsTo
-    {
-        return $this->belongsTo(SparepartsDevice::class);
-    }
+    // public function SparepartsDevice(): BelongsTo
+    // {
+    //     return $this->belongsTo(SparepartsDevice::class);
+    // }
 }

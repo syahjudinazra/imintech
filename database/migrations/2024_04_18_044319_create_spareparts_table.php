@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('spareparts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nosparepart');
-            $table->unsignedBigInteger('sparepartsdevice_id');
+            $table->string('tipe');
             $table->string('nama');
             $table->integer('quantity');
             $table->integer('harga');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('sparepartsdevice_id')->references('id')->on('sparepartsdevice')->onDelete('cascade');
         });
     }
 

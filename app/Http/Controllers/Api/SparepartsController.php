@@ -14,8 +14,8 @@ class SparepartsController extends Controller
      */
     public function index()
     {
-        $spareParts = Spareparts::with('SparepartsDevice')->latest()->get();
-
+        // $spareParts = Spareparts::with('SparepartsDevice')->latest()->get();
+        $spareParts = Spareparts::paginate(10);
         return response()->json(['data' => $spareParts]);
     }
 
@@ -34,7 +34,7 @@ class SparepartsController extends Controller
     {
         $request->validate([
             'nosparepart' => 'required|max:255',
-            'sparepartsdevice_id' => 'required',
+            'tipe' => 'required',
             'nama' => 'required|max:255',
             'quantity' => 'required|numeric',
             'harga' => 'required|numeric',
@@ -44,7 +44,7 @@ class SparepartsController extends Controller
             // Create a new Spareparts instance
             $spareParts = new Spareparts();
             $spareParts->nosparepart = $request->input('nosparepart');
-            $spareParts->sparepartsdevice_id = $request->input('sparepartsdevice_id');
+            $spareParts->tipe = $request->input('tipe');
             $spareParts->nama = $request->input('nama');
             $spareParts->quantity = $request->input('quantity');
             $spareParts->harga = $request->input('harga');
@@ -52,10 +52,10 @@ class SparepartsController extends Controller
             // Save the Spareparts instance
             $spareParts->save();
 
-            return response()->json(['message' => 'Data berhasil ditambahkan', 'status' => true]);
+            return response()->json(['message' => 'Data berhasil ditambahkan']);
         } catch (\Exception $e) {
             // Return error response
-            return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage(), 'status' => false], 500);
+            return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage()], 500);
         }
     }
 
@@ -65,7 +65,8 @@ class SparepartsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $spareParts = Spareparts::findOrFail($id);
+        return response()->json(['data' => $spareParts]);
     }
 
     /**
@@ -81,8 +82,35 @@ class SparepartsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nosparepart' => 'required|max:255',
+            'tipe' => 'required',
+            'nama' => 'required|max:255',
+            'quantity' => 'required|numeric',
+            'harga' => 'required|numeric',
+        ]);
+
+        try {
+            // Find the Spareparts instance
+            $spareParts = Spareparts::findOrFail($id);
+
+            // Update the Spareparts instance
+            $spareParts->update([
+                'nosparepart' => $request->input('nosparepart'),
+                'tipe' => $request->input('tipe'),
+                'nama' => $request->input('nama'),
+                'quantity' => $request->input('quantity'),
+                'harga' => $request->input('harga'),
+            ]);
+
+            // Return success response
+            return response()->json(['message' => 'Data berhasil diperbarui'], 204);
+        } catch (\Exception $e) {
+            // Return error response
+            return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
