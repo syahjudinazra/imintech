@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Spareparts;
-use App\Models\SparepartsDevice;
 use Illuminate\Http\Request;
 
 class SparepartsController extends Controller
@@ -91,10 +90,8 @@ class SparepartsController extends Controller
         ]);
 
         try {
-            // Find the Spareparts instance
             $spareParts = Spareparts::findOrFail($id);
 
-            // Update the Spareparts instance
             $spareParts->update([
                 'nosparepart' => $request->input('nosparepart'),
                 'tipe' => $request->input('tipe'),
@@ -122,9 +119,7 @@ class SparepartsController extends Controller
         if (!$spareparts) {
             return response()->json(['message' => 'Data tidak ditemukan', 'status' => false], 404);
         }
-
         $spareparts->delete();
-
         return response()->json(['message' => 'Data berhasil dihapus', 'status' => true]);
     }
 }

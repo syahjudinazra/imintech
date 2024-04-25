@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('firmwares', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('firmwaresdevice_id');
+            $table->string('tipe');
             $table->string('versi');
             $table->string('android');
             $table->string('flash');
@@ -23,7 +23,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('firmwaresdevice_id')->references('id')->on('firmwaresdevice')->onDelete('cascade');
         });
     }
 
