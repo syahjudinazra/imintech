@@ -13,12 +13,12 @@ class ServicesController extends Controller
      */
     public function index()
     {
-        // Fetching Services data along with their associated ServicesDevice
-        $services = Services::with('ServicesDevices')->latest()->get();
+        $services = Services::all();
 
-        // Mapping the array of objects and adding ServicesDevice data
-        $mappedServices = $services->map(function ($service) {
+        $formattedServices = $services->map(function ($service) {
+
             return [
+                'id' => $service->id,
                 'serialnumber' => $service->serialnumber,
                 'tanggalmasuk' => $service->tanggalmasuk,
                 'tanggalselesai' => $service->tanggalselesai,
@@ -26,8 +26,8 @@ class ServicesController extends Controller
                 'status' => $service->status,
                 'pelanggan' => $service->pelanggan,
                 'servicesdevice' => [
-                    'id' => $service->id,
-                    'name' => $service->name,
+                    'id' => $service->servicesTipe->id,
+                    'name' => $service->servicesTipe->name
                 ],
                 'pemakaian' => $service->pemakaian,
                 'kerusakan' => $service->kerusakan,
@@ -36,11 +36,19 @@ class ServicesController extends Controller
                 'snkanibal' => $service->snkanibal,
                 'teknisi' => $service->teknisi,
                 'catatan' => $service->catatan,
+                'created_at' => $service->created_at,
+                'updated_at' => $service->updated_at,
+                'deleted_at' => $service->deleted_at,
             ];
         });
 
-        return response()->json(['data' => $mappedServices]);
+        // Return JSON response
+        return response()->json([
+            'messages' => 'Data ditemukan',
+            'data' => $formattedServices
+        ]);
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -54,6 +62,7 @@ class ServicesController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'serialnumber' => 'required',
             'tanggalmasuk' => 'required|max:255',
@@ -72,26 +81,51 @@ class ServicesController extends Controller
         ]);
 
         try {
+            $service = new Services();
+            $service->serialnumber = $request->input('serialnumber');
+            $service->tanggalmasuk = $request->input('tanggalmasuk');
+            $service->tanggalselesai = $request->input('tanggalselesai');
+            $service->pemilik = $request->input('pemilik');
+            $service->status = $request->input('status');
+            $service->pelanggan = $request->input('pelanggan');
+            $service->servicesdevice_id = $request->input('servicesdevice_id');
+            $service->pemakaian = $request->input('pemakaian');
+            $service->kerusakan = $request->input('kerusakan');
+            $service->perbaikan = $request->input('perbaikan');
+            $service->nosparepart = $request->input('nosparepart');
+            $service->snkanibal = $request->input('snkanibal');
+            $service->teknisi = $request->input('teknisi');
+            $service->catatan = $request->input('catatan');
 
-            $services = new Services();
-            $services->serialnumber = $request->input('serialnumber');
-            $services->tanggalmasuk = $request->input('tanggalmasuk');
-            $services->tanggalselesai = $request->input('tanggalselesai');
-            $services->pemilik = $request->input('pemilik');
-            $services->status = $request->input('status');
-            $services->pelanggan = $request->input('pelanggan');
-            $services->servicesdevice_id = $request->input('servicesdevice_id');
-            $services->pemakaian = $request->input('pemakaian');
-            $services->kerusakan = $request->input('kerusakan');
-            $services->perbaikan = $request->input('perbaikan');
-            $services->nosparepart = $request->input('nosparepart');
-            $services->snkanibal = $request->input('snkanibal');
-            $services->teknisi = $request->input('teknisi');
-            $services->catatan = $request->input('catatan');
+            $service->save();
 
-            $services->save();
-
-            return response()->json(['message' => 'Data berhasil ditambahkan']);
+            // Return formatted response JSON
+            return response()->json([
+                'message' => 'Data berhasil ditambahkan',
+                'data' => [
+                    'id' => $service->id,
+                    'serialnumber' => $service->serialnumber,
+                    'tanggalmasuk' => $service->tanggalmasuk,
+                    'tanggalselesai' => $service->tanggalselesai,
+                    'pemilik' => $service->pemilik,
+                    'status' => $service->status,
+                    'pelanggan' => $service->pelanggan,
+                    'servicesdevice' => [
+                        'id' => $service->servicesTipe->id,
+                        'name' => $service->servicesTipe->name
+                    ],
+                    'pemakaian' => $service->pemakaian,
+                    'kerusakan' => $service->kerusakan,
+                    'perbaikan' => $service->perbaikan,
+                    'nosparepart' => $service->nosparepart,
+                    'snkanibal' => $service->snkanibal,
+                    'teknisi' => $service->teknisi,
+                    'catatan' => $service->catatan,
+                    'created_at' => $service->created_at,
+                    'updated_at' => $service->updated_at,
+                    'deleted_at' => $service->deleted_at,
+                ]
+            ]);
         } catch (\Exception $e) {
             // Return error response
             return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage()], 500);
@@ -103,8 +137,33 @@ class ServicesController extends Controller
      */
     public function show(string $id)
     {
-        $services = Services::findOrFails($id);
-        return response()->json(['data' => $services]);
+        $service = Services::findOrFail($id);
+        return response()->json([
+            'message' => 'Data berhasil ditemukan',
+            'data' => [
+                'id' => $service->id,
+                'serialnumber' => $service->serialnumber,
+                'tanggalmasuk' => $service->tanggalmasuk,
+                'tanggalselesai' => $service->tanggalselesai,
+                'pemilik' => $service->pemilik,
+                'status' => $service->status,
+                'pelanggan' => $service->pelanggan,
+                'servicesdevice' => [
+                    'id' => $service->servicesTipe->id,
+                    'name' => $service->servicesTipe->name
+                ],
+                'pemakaian' => $service->pemakaian,
+                'kerusakan' => $service->kerusakan,
+                'perbaikan' => $service->perbaikan,
+                'nosparepart' => $service->nosparepart,
+                'snkanibal' => $service->snkanibal,
+                'teknisi' => $service->teknisi,
+                'catatan' => $service->catatan,
+                'created_at' => $service->created_at,
+                'updated_at' => $service->updated_at,
+                'deleted_at' => $service->deleted_at,
+            ]
+        ]);
     }
 
     /**
@@ -138,10 +197,9 @@ class ServicesController extends Controller
         ]);
 
         try {
-            $services = Services::findOrFail($id);
+            $service = Services::findOrFail($id);
 
-            // Update firmware data
-            $services->update([
+            $service->update([
                 'serialnumber' => $request->input('serialnumber'),
                 'tanggalmasuk' => $request->input('tanggalmasuk'),
                 'tanggalselesai' => $request->input('tanggalselesai'),
@@ -158,7 +216,32 @@ class ServicesController extends Controller
                 'catatan' => $request->input('catatan'),
             ]);
 
-            return response()->json(['message' => 'Data berhasil ditambahkan']);
+            return response()->json([
+                'message' => 'Data berhasil diubah',
+                'data' => [
+                    'id' => $service->id,
+                    'serialnumber' => $service->serialnumber,
+                    'tanggalmasuk' => $service->tanggalmasuk,
+                    'tanggalselesai' => $service->tanggalselesai,
+                    'pemilik' => $service->pemilik,
+                    'status' => $service->status,
+                    'pelanggan' => $service->pelanggan,
+                    'servicesdevice' => [
+                        'id' => $service->servicesTipe->id,
+                        'name' => $service->servicesTipe->name
+                    ],
+                    'pemakaian' => $service->pemakaian,
+                    'kerusakan' => $service->kerusakan,
+                    'perbaikan' => $service->perbaikan,
+                    'nosparepart' => $service->nosparepart,
+                    'snkanibal' => $service->snkanibal,
+                    'teknisi' => $service->teknisi,
+                    'catatan' => $service->catatan,
+                    'created_at' => $service->created_at,
+                    'updated_at' => $service->updated_at,
+                    'deleted_at' => $service->deleted_at,
+                ]
+            ]);
         } catch (\Exception $e) {
             // Return error response
             return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage()], 500);
@@ -170,12 +253,12 @@ class ServicesController extends Controller
      */
     public function destroy(string $id)
     {
-        $services = Services::find($id);
+        $service = Services::find($id);
 
-        if (!$services) {
+        if (!$service) {
             return response()->json(['message' => 'Data tidak ditemukan', 'status' => false], 404);
         }
-        $services->delete();
+        $service->delete();
         return response()->json(['message' => 'Data berhasil dihapus', 'status' => true]);
     }
 }

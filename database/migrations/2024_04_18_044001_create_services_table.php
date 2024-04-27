@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('pelanggan');
             $table->unsignedBigInteger('servicesdevice_id');
+            $table->foreign('servicesdevice_id')->references('id')->on('servicesdevice')->onUpdate('cascade')->onDelete('cascade');
             $table->string('pemakaian');
             $table->string('kerusakan');
             $table->string('perbaikan')->nullable();
@@ -29,8 +30,6 @@ return new class extends Migration
             $table->string('catatan');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('servicesdevice_id')->references('id')->on('servicesdevice')->onDelete('cascade');
         });
     }
 

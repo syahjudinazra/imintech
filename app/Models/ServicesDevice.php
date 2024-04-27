@@ -10,11 +10,14 @@ class ServicesDevice extends Model
 {
     use HasFactory;
 
+    protected $table = 'servicesdevice';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'name',
     ];
 
-    public function servicesTipe(): HasMany
+    public function ServicesPilar(): HasMany
     {
         return $this->hasMany(Services::class);
     }

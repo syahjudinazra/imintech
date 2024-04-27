@@ -32,8 +32,8 @@ class Services extends Model
         'catatan',
     ];
 
-    public function ServicesDevices(): BelongsTo
+    public function ServicesTipe(): BelongsTo
     {
-        return $this->belongsTo(ServicesDevice::class);
+        return $this->belongsTo(ServicesDevice::class, 'servicesdevice_id');
     }
 }
