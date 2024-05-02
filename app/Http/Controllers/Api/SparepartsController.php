@@ -14,7 +14,7 @@ class SparepartsController extends Controller
     public function index()
     {
         // $spareParts = Spareparts::with('SparepartsDevice')->latest()->get();
-        $spareParts = Spareparts::paginate(10);
+        $spareParts = Spareparts::all();
         return response()->json(['data' => $spareParts]);
     }
 

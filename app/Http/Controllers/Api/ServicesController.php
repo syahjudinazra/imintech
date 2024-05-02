@@ -137,10 +137,11 @@ class ServicesController extends Controller
      */
     public function show(string $id)
     {
-        $service = Services::findOrFail($id);
-        return response()->json([
-            'message' => 'Data berhasil ditemukan',
-            'data' => [
+        try {
+            $service = Services::findOrFail($id);
+
+            // Format the service data
+            $formattedService = [
                 'id' => $service->id,
                 'serialnumber' => $service->serialnumber,
                 'tanggalmasuk' => $service->tanggalmasuk,
@@ -162,9 +163,19 @@ class ServicesController extends Controller
                 'created_at' => $service->created_at,
                 'updated_at' => $service->updated_at,
                 'deleted_at' => $service->deleted_at,
-            ]
-        ]);
+            ];
+
+            return response()->json([
+                'message' => 'Data ditemukan',
+                'data' => $formattedService
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -177,70 +188,57 @@ class ServicesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'serialnumber' => 'required',
             'tanggalmasuk' => 'required|max:255',
-            'tanggalselesai' => 'max:255',
+            'tanggalselesai' => 'nullable|max:255',
             'pemilik' => 'required|max:255',
             'status' => 'required|max:255',
             'pelanggan' => 'required|max:255',
             'servicesdevice_id' => 'required|max:255',
             'pemakaian' => 'required|max:255',
             'kerusakan' => 'required|max:255',
-            'perbaikan' => 'max:255',
-            'nosparepart' => 'max:255',
-            'snkanibal' => 'max:255',
-            'teknisi' => 'max:255',
+            'perbaikan' => 'nullable|max:255',
+            'nosparepart' => 'nullable|max:255',
+            'snkanibal' => 'nullable|max:255',
+            'teknisi' => 'nullable|max:255',
             'catatan' => 'required|max:255',
         ]);
 
         try {
             $service = Services::findOrFail($id);
 
-            $service->update([
-                'serialnumber' => $request->input('serialnumber'),
-                'tanggalmasuk' => $request->input('tanggalmasuk'),
-                'tanggalselesai' => $request->input('tanggalselesai'),
-                'pemilik' => $request->input('pemilik'),
-                'status' => $request->input('status'),
-                'pelanggan' => $request->input('pelanggan'),
-                'servicesdevice_id' => $request->input('servicesdevice_id'),
-                'pemakaian' => $request->input('pemakaian'),
-                'kerusakan' => $request->input('kerusakan'),
-                'perbaikan' => $request->input('perbaikan'),
-                'nosparepart' => $request->input('nosparepart'),
-                'snkanibal' => $request->input('snkanibal'),
-                'teknisi' => $request->input('teknisi'),
-                'catatan' => $request->input('catatan'),
-            ]);
+            $service->update($request->all());
+
+            $formattedService = [
+                'id' => $service->id,
+                'serialnumber' => $service->serialnumber,
+                'tanggalmasuk' => $service->tanggalmasuk,
+                'tanggalselesai' => $service->tanggalselesai,
+                'pemilik' => $service->pemilik,
+                'status' => $service->status,
+                'pelanggan' => $service->pelanggan,
+                'servicesdevice' => [
+                    'id' => $service->servicesTipe->id,
+                    'name' => $service->servicesTipe->name
+                ],
+                'pemakaian' => $service->pemakaian,
+                'kerusakan' => $service->kerusakan,
+                'perbaikan' => $service->perbaikan,
+                'nosparepart' => $service->nosparepart,
+                'snkanibal' => $service->snkanibal,
+                'teknisi' => $service->teknisi,
+                'catatan' => $service->catatan,
+                'created_at' => $service->created_at,
+                'updated_at' => $service->updated_at,
+                'deleted_at' => $service->deleted_at,
+            ];
 
             return response()->json([
                 'message' => 'Data berhasil diubah',
-                'data' => [
-                    'id' => $service->id,
-                    'serialnumber' => $service->serialnumber,
-                    'tanggalmasuk' => $service->tanggalmasuk,
-                    'tanggalselesai' => $service->tanggalselesai,
-                    'pemilik' => $service->pemilik,
-                    'status' => $service->status,
-                    'pelanggan' => $service->pelanggan,
-                    'servicesdevice' => [
-                        'id' => $service->servicesTipe->id,
-                        'name' => $service->servicesTipe->name
-                    ],
-                    'pemakaian' => $service->pemakaian,
-                    'kerusakan' => $service->kerusakan,
-                    'perbaikan' => $service->perbaikan,
-                    'nosparepart' => $service->nosparepart,
-                    'snkanibal' => $service->snkanibal,
-                    'teknisi' => $service->teknisi,
-                    'catatan' => $service->catatan,
-                    'created_at' => $service->created_at,
-                    'updated_at' => $service->updated_at,
-                    'deleted_at' => $service->deleted_at,
-                ]
+                'data' => $formattedService
             ]);
         } catch (\Exception $e) {
             // Return error response
