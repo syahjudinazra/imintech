@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('pinjams', function (Blueprint $table) {
             $table->increments('id');
             $table->date('tanggal');
-            $table->string('gambar', 255)->nullable();
             $table->string('serialnumber');
             $table->unsignedBigInteger('pinjamsdevice_id');
             $table->string('ram');
@@ -22,7 +21,7 @@ return new class extends Migration
             $table->string('pelanggan');
             $table->string('alamat');
             $table->string('sales');
-            $table->integer('no_telp');
+            $table->string('no_telp');
             $table->string('pengirim');
             $table->string('kelengkapankirim');
             $table->date('tanggalkembali')->nullable();

@@ -13,9 +13,67 @@ class SparepartsController extends Controller
      */
     public function index()
     {
-        // $spareParts = Spareparts::with('SparepartsDevice')->latest()->get();
         $spareParts = Spareparts::all();
-        return response()->json(['data' => $spareParts]);
+
+        $formattedSpareparts = $spareParts->map(function ($sparePart) {
+
+            return [
+                'id' => $sparePart->id,
+                'nosparepart' => $sparePart->nosparepart,
+                'tipe' => $sparePart->tipe,
+                'nama' => $sparePart->nama,
+                'quantity' => $sparePart->quantity,
+                'harga' => $sparePart->harga,
+                'created_at' => $sparePart->created_at,
+                'updated_at' => $sparePart->updated_at,
+                'deleted_at' => $sparePart->deleted_at,
+            ];
+        });
+
+        // Return JSON response
+        return response()->json([
+            'messages' => 'Data ditemukan',
+            'data' => $formattedSpareparts
+        ]);
+    }
+
+    public function updateQuantity(Request $request, $id)
+    {
+        $spareParts = SpareParts::findOrFail($id);
+        $quantity = $request->input('quantity');
+
+        if (is_null($quantity) || !is_numeric($quantity) || $quantity <= 0) {
+            return response()->json([
+                'messages' => 'Quantity must be a positive number',
+            ], 400);
+        }
+
+        if ($request->has('add')) {
+            $spareParts->quantity += $quantity;
+            $spareParts->save();
+            return response()->json([
+                'messages' => 'Berhasil tambah quantity',
+                'data' => $spareParts
+            ]);
+        } elseif ($request->has('reduce')) {
+            if ($spareParts->quantity >= $quantity) {
+                $spareParts->quantity -= $quantity;
+                $spareParts->save();
+                return response()->json([
+                    'messages' => 'Berhasil kurangi quantity',
+                    'data' => $spareParts
+                ]);
+            } else {
+                return response()->json([
+                    'messages' => 'Jumlah yang dikurangi melebihi quantity',
+                    'data' => $spareParts
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'messages' => 'Invalid request, must contain either add or reduce',
+            ], 400);
+        }
     }
 
     /**
@@ -40,18 +98,12 @@ class SparepartsController extends Controller
         ]);
 
         try {
-            // Create a new Spareparts instance
-            $spareParts = new Spareparts();
-            $spareParts->nosparepart = $request->input('nosparepart');
-            $spareParts->tipe = $request->input('tipe');
-            $spareParts->nama = $request->input('nama');
-            $spareParts->quantity = $request->input('quantity');
-            $spareParts->harga = $request->input('harga');
+            $spareParts = Spareparts::create($request->all());
 
-            // Save the Spareparts instance
-            $spareParts->save();
-
-            return response()->json(['message' => 'Data berhasil ditambahkan']);
+            return response()->json([
+                'message' => 'Data berhasil ditambahkan',
+                'data' => $spareParts
+            ], 200);
         } catch (\Exception $e) {
             // Return error response
             return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage()], 500);
@@ -64,8 +116,31 @@ class SparepartsController extends Controller
      */
     public function show(string $id)
     {
-        $spareParts = Spareparts::findOrFail($id);
-        return response()->json(['data' => $spareParts]);
+        try {
+            $spareParts = Spareparts::findOrFail($id);
+
+            // Format the service data
+            $formattedSpareparts = [
+                'id' => $spareParts->id,
+                'nosparepart' => $spareParts->nosparepart,
+                'tipe' => $spareParts->tipe,
+                'nama' => $spareParts->nama,
+                'quantity' => $spareParts->quantity,
+                'harga' => $spareParts->harga,
+                'created_at' => $spareParts->created_at,
+                'updated_at' => $spareParts->updated_at,
+                'deleted_at' => $spareParts->deleted_at,
+            ];
+
+            return response()->json([
+                'message' => 'Data ditemukan',
+                'data' => $formattedSpareparts
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
     }
 
     /**
@@ -92,19 +167,27 @@ class SparepartsController extends Controller
         try {
             $spareParts = Spareparts::findOrFail($id);
 
-            $spareParts->update([
-                'nosparepart' => $request->input('nosparepart'),
-                'tipe' => $request->input('tipe'),
-                'nama' => $request->input('nama'),
-                'quantity' => $request->input('quantity'),
-                'harga' => $request->input('harga'),
-            ]);
+            $spareParts->update($request->all());
 
-            // Return success response
-            return response()->json(['message' => 'Data berhasil diperbarui'], 204);
+            // Format the service data
+            $formattedSpareparts = [
+                'id' => $spareParts->id,
+                'nosparepart' => $spareParts->nosparepart,
+                'tipe' => $spareParts->tipe,
+                'nama' => $spareParts->nama,
+                'quantity' => $spareParts->quantity,
+                'harga' => $spareParts->harga,
+                'created_at' => $spareParts->created_at,
+                'updated_at' => $spareParts->updated_at,
+                'deleted_at' => $spareParts->deleted_at,
+            ];
+
+            return response()->json([
+                'message' => 'Data berhasil diubah',
+                'data' => $formattedSpareparts
+            ], 200);
         } catch (\Exception $e) {
-            // Return error response
-            return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Data gagal diubah: ' . $e->getMessage()], 500);
         }
     }
 

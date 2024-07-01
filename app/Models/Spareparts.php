@@ -4,13 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 
 class Spareparts extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'spareparts';
     protected $primaryKey = 'id';
@@ -23,8 +26,17 @@ class Spareparts extends Model
         'harga',
     ];
 
-    // public function SparepartsDevice(): BelongsTo
-    // {
-    //     return $this->belongsTo(SparepartsDevice::class);
-    // }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'nosparepart',
+                'tipe',
+                'nama',
+                'quantity',
+                'harga',
+            ])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $eventName) => "You have {$eventName} data");
+    }
 }

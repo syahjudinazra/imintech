@@ -13,19 +13,68 @@ class FirmwaresController extends Controller
      */
     public function index()
     {
-        $firmwares = Firmwares::all();
-        return response()->json([
-            'message' => 'Data ditemukan',
-            'data' => $firmwares
-        ]);
+        try {
+            $firmwares = Firmwares::all();
+
+            // Format firmwares data
+            $formattedFirmwares = $firmwares->map(function ($firmware) {
+                return [
+                    'id' => $firmware->id,
+                    'tipe' => $firmware->tipe,
+                    'versi' => $firmware->versi,
+                    'android' => $firmware->android,
+                    'flash' => $firmware->flash,
+                    'ota' => $firmware->ota,
+                    'kategori' => $firmware->kategori,
+                    'gambar' => url('storage/gambar/' . $firmware->gambar),
+                    'created_at' => $firmware->created_at,
+                    'updated_at' => $firmware->updated_at,
+                    'deleted_at' => $firmware->deleted_at
+                ];
+            });
+
+            // Return JSON response
+            return response()->json([
+                'message' => 'Data ditemukan',
+                'data' => $formattedFirmwares,
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json(['message' => 'Data tidak ditemukan: ' . $e->getMessage()], 500);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function table()
     {
-        //
+        try {
+            $firmwares = Firmwares::all();
+
+            // Format firmwares data
+            $formattedFirmwares = $firmwares->map(function ($firmware) {
+                return [
+                    'id' => $firmware->id,
+                    'tipe' => $firmware->tipe,
+                    'versi' => $firmware->versi,
+                    'android' => $firmware->android,
+                    'flash' => $firmware->flash,
+                    'ota' => $firmware->ota,
+                    'kategori' => $firmware->kategori,
+                    'gambar' => url('storage/gambar/' . $firmware->gambar),
+                    'created_at' => $firmware->created_at,
+                    'updated_at' => $firmware->updated_at,
+                    'deleted_at' => $firmware->deleted_at
+                ];
+            });
+
+            // Return JSON response
+            return response()->json([
+                'message' => 'Data ditemukan',
+                'data' => $formattedFirmwares,
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json(['message' => 'Data tidak ditemukan: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -33,38 +82,38 @@ class FirmwaresController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'tipe' => 'required',
-            'versi' => 'required|max:255',
-            'android' => 'required|max:255',
-            'flash' => 'required|max:255',
-            'ota' => 'required|max:255',
-            'kategori' => 'required|max:255',
-            'gambar' => 'image|mimes:jpg,png|max:2048',
-        ]);
-
         try {
-            $firmwares = new Firmwares();
+            $request->validate([
+                'tipe' => 'required',
+                'versi' => 'required|max:255',
+                'android' => 'required|max:255',
+                'flash' => 'required|max:255',
+                'ota' => 'max:255|nullable',
+                'kategori' => 'required|max:255',
+                'gambar' => 'image|mimes:jpeg,png,jpg|max:2048',
+            ]);
 
-            $gambar = $request->file('gambar');
-            if ($gambar) {
-                $gambar_name = time() . '_' . $gambar->getClientOriginalName();
-                $gambar->move(public_path('images'), $gambar_name);
-                $firmwares->gambar = $gambar_name;
+            $firmware = new Firmwares();
+            if ($request->hasFile('gambar')) {
+                $file = $request->file('gambar');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move('storage/gambar/', $filename);
+                $firmware->gambar = $filename;
             }
 
-            $firmwares->tipe = $request->input('tipe');
-            $firmwares->versi = $request->input('versi');
-            $firmwares->android = $request->input('android');
-            $firmwares->flash = $request->input('flash');
-            $firmwares->ota = $request->input('ota');
-            $firmwares->kategori = $request->input('kategori');
+            $firmware->tipe = $request->input('tipe');
+            $firmware->versi = $request->input('versi');
+            $firmware->android = $request->input('android');
+            $firmware->flash = $request->input('flash');
+            $firmware->ota = $request->input('ota') ?? '';
+            $firmware->kategori = $request->input('kategori');
 
-            $firmwares->save();
+            $firmware->save();
 
             return response()->json([
                 'message' => 'Data berhasil ditambahkan',
-                'data' => $firmwares
+                'data' => $firmware
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Gagal menambahkan data: ' . $e->getMessage()], 500);
@@ -84,14 +133,6 @@ class FirmwaresController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -101,7 +142,7 @@ class FirmwaresController extends Controller
             'versi' => 'required|max:255',
             'android' => 'required|max:255',
             'flash' => 'required|max:255',
-            'ota' => 'required|max:255',
+            'ota' => 'max:255|nullable',
             'kategori' => 'required|max:255',
             'gambar' => 'image|mimes:jpg,png|max:2048',
         ]);
@@ -115,7 +156,7 @@ class FirmwaresController extends Controller
                 'versi' => $request->input('versi'),
                 'android' => $request->input('android'),
                 'flash' => $request->input('flash'),
-                'ota' => $request->input('ota'),
+                'ota' => $request->input('ota') ?? '',
                 'kategori' => $request->input('kategori'),
             ]);
 
@@ -137,11 +178,11 @@ class FirmwaresController extends Controller
             }
 
             return response()->json([
-                'message' => 'Data berhasil diupdate',
+                'message' => 'Data berhasil diubah',
                 'data' => $firmwares
             ]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Gagal mengupdate data: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Data gagal diubah: ' . $e->getMessage()], 500);
         }
     }
 

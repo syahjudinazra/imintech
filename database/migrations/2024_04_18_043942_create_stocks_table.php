@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('serialnumber');
             $table->unsignedBigInteger('stocksdevice_id');
+            $table->unsignedBigInteger('stocks_sku_id');
             $table->string('noinvoice');
             $table->date('tanggalmasuk');
             $table->date('tanggalkeluar')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('stocksdevice_id')->references('id')->on('stocksdevice')->onDelete('cascade');
+            $table->foreign('stocks_sku_id')->references('id')->on('stocks_sku')->onDelete('cascade');
         });
     }
 

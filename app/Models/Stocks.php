@@ -18,6 +18,7 @@ class Stocks extends Model
     protected $fillable = [
         'serialnumber',
         'stocksdevice_id',
+        'stocks_sku_id',
         'noinvoice',
         'tanggalmasuk',
         'tanggalkeluar',
@@ -27,8 +28,13 @@ class Stocks extends Model
         'status',
     ];
 
-    public function StocksTipe(): BelongsTo
+    public function stockTipe(): BelongsTo
     {
         return $this->belongsTo(StocksDevice::class, 'stocksdevice_id');
+    }
+
+    public function stocksKeeping(): BelongsTo
+    {
+        return $this->belongsTo(StocksSku::class, 'stocks_sku_id');
     }
 }

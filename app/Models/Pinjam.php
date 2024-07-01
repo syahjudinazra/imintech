@@ -17,7 +17,6 @@ class Pinjam extends Model
 
     protected $fillable = [
         'tanggal',
-        'gambar',
         'serialnumber',
         'pinjamsdevice_id',
         'ram',
@@ -35,7 +34,7 @@ class Pinjam extends Model
     ];
 
 
-    public function PinjamTipe(): BelongsTo
+    public function pinjamTipe(): BelongsTo
     {
         return $this->belongsTo(PinjamDevice::class, 'pinjamsdevice_id');
     }
