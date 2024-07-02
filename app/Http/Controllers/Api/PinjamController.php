@@ -14,6 +14,10 @@ class PinjamController extends Controller
     public function index(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Pinjam::where('status', 'Dipinjamkan')
                 ->orderByDesc('tanggal');
 
@@ -78,6 +82,10 @@ class PinjamController extends Controller
     public function kembali(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Pinjam::where('status', 'Dikembalikan')
                 ->orderByDesc('tanggal');
 

@@ -11,12 +11,14 @@ class FirmwaresController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $firmwares = Firmwares::all();
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
 
-            // Format firmwares data
+            $firmwares = Firmwares::all();
             $formattedFirmwares = $firmwares->map(function ($firmware) {
                 return [
                     'id' => $firmware->id,
@@ -33,23 +35,24 @@ class FirmwaresController extends Controller
                 ];
             });
 
-            // Return JSON response
             return response()->json([
                 'message' => 'Data ditemukan',
                 'data' => $formattedFirmwares,
             ], 200);
         } catch (\Exception $e) {
-            // Handle exceptions
             return response()->json(['message' => 'Data tidak ditemukan: ' . $e->getMessage()], 500);
         }
     }
 
-    public function table()
+    public function table(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $firmwares = Firmwares::all();
 
-            // Format firmwares data
             $formattedFirmwares = $firmwares->map(function ($firmware) {
                 return [
                     'id' => $firmware->id,

@@ -11,31 +11,45 @@ class SparepartsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $spareParts = Spareparts::all();
+        try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
 
-        $formattedSpareparts = $spareParts->map(function ($sparePart) {
+            // Fetch all spare parts
+            $spareParts = Spareparts::all();
 
-            return [
-                'id' => $sparePart->id,
-                'nosparepart' => $sparePart->nosparepart,
-                'tipe' => $sparePart->tipe,
-                'nama' => $sparePart->nama,
-                'quantity' => $sparePart->quantity,
-                'harga' => $sparePart->harga,
-                'created_at' => $sparePart->created_at,
-                'updated_at' => $sparePart->updated_at,
-                'deleted_at' => $sparePart->deleted_at,
-            ];
-        });
+            // Format spare parts data
+            $formattedSpareparts = $spareParts->map(function ($sparePart) {
+                return [
+                    'id' => $sparePart->id,
+                    'nosparepart' => $sparePart->nosparepart,
+                    'tipe' => $sparePart->tipe,
+                    'nama' => $sparePart->nama,
+                    'quantity' => $sparePart->quantity,
+                    'harga' => $sparePart->harga,
+                    'created_at' => $sparePart->created_at,
+                    'updated_at' => $sparePart->updated_at,
+                    'deleted_at' => $sparePart->deleted_at,
+                ];
+            });
 
-        // Return JSON response
-        return response()->json([
-            'messages' => 'Data ditemukan',
-            'data' => $formattedSpareparts
-        ]);
+            // Return JSON response
+            return response()->json([
+                'messages' => 'Data ditemukan',
+                'data' => $formattedSpareparts
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'messages' => 'Terjadi kesalahan',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function updateQuantity(Request $request, $id)
     {

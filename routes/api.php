@@ -27,6 +27,7 @@ Route::post('/register', RegisterController::class)->name('register');
 Route::post('/login', LoginController::class)->name('login');
 Route::post('/logout', LogoutController::class)->name('logout');
 
+Route::middleware(['auth:api'])->group(function () {
 /**Spareparts */
 Route::get('/getspareparts', [SparepartsController::class, 'index']);
 Route::post('/addspareparts', [SparepartsController::class, 'store'])->name('add.spareparts');
@@ -112,3 +113,5 @@ Route::get('/getlistservices', [ServicesDeviceController::class, 'index']);
 Route::post('/addslistservices', [ServicesDeviceController::class, 'store'])->name('add.listservices');
 Route::put('/updatelistservices/{id}', [ServicesDeviceController::class, 'update'])->name('update.listservices');
 Route::delete('/destroylistservices/{id}', [ServicesDeviceController::class, 'destroy'])->name('delete.listservices');
+
+});

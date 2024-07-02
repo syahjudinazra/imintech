@@ -14,43 +14,55 @@ class ServicesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $services = Services::all();
+        try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
 
-        $formattedServices = $services->map(function ($service) {
+            $services = Services::all();
 
-            return [
-                'id' => $service->id,
-                'serialnumber' => $service->serialnumber,
-                'tanggalmasuk' => $service->tanggalmasuk,
-                'tanggalselesai' => $service->tanggalselesai,
-                'pemilik' => $service->pemilik,
-                'status' => $service->status,
-                'pelanggan' => $service->pelanggan,
-                'servicesdevice' => [
-                    'id' => $service->servicesTipe->id,
-                    'name' => $service->servicesTipe->name
-                ],
-                'pemakaian' => $service->pemakaian,
-                'kerusakan' => $service->kerusakan,
-                'perbaikan' => $service->perbaikan,
-                'nosparepart' => $service->nosparepart,
-                'snkanibal' => $service->snkanibal,
-                'teknisi' => $service->teknisi,
-                'catatan' => $service->catatan,
-                'created_at' => $service->created_at,
-                'updated_at' => $service->updated_at,
-                'deleted_at' => $service->deleted_at,
-            ];
-        });
+            $formattedServices = $services->map(function ($service) {
+                return [
+                    'id' => $service->id,
+                    'serialnumber' => $service->serialnumber,
+                    'tanggalmasuk' => $service->tanggalmasuk,
+                    'tanggalselesai' => $service->tanggalselesai,
+                    'pemilik' => $service->pemilik,
+                    'status' => $service->status,
+                    'pelanggan' => $service->pelanggan,
+                    'servicesdevice' => [
+                        'id' => $service->servicesTipe->id,
+                        'name' => $service->servicesTipe->name
+                    ],
+                    'pemakaian' => $service->pemakaian,
+                    'kerusakan' => $service->kerusakan,
+                    'perbaikan' => $service->perbaikan,
+                    'nosparepart' => $service->nosparepart,
+                    'snkanibal' => $service->snkanibal,
+                    'teknisi' => $service->teknisi,
+                    'catatan' => $service->catatan,
+                    'created_at' => $service->created_at,
+                    'updated_at' => $service->updated_at,
+                    'deleted_at' => $service->deleted_at,
+                ];
+            });
 
-        // Return JSON response
-        return response()->json([
-            'messages' => 'Data ditemukan',
-            'data' => $formattedServices
-        ]);
+            // Return JSON response
+            return response()->json([
+                'messages' => 'Data ditemukan',
+                'data' => $formattedServices
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat mengambil data',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function export()
     {
@@ -63,6 +75,10 @@ class ServicesController extends Controller
     public function antrianPelanggan(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Services::where('status', 'Antrian')
                 ->where('pemilik', 'customer')
                 ->orderByDesc('tanggalmasuk');
@@ -128,6 +144,10 @@ class ServicesController extends Controller
     public function validasiPelanggan(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Services::where('status', 'Validasi')
                 ->where('pemilik', 'customer')
                 ->orderByDesc('tanggalmasuk');
@@ -192,6 +212,10 @@ class ServicesController extends Controller
     public function selesaiPelanggan(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Services::where('status', 'Selesai')
                 ->where('pemilik', 'customer')
                 ->orderByDesc('tanggalselesai');
@@ -256,6 +280,10 @@ class ServicesController extends Controller
     public function antrianStock(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Services::where('status', 'Antrian')
                 ->where('pemilik', 'stock')
                 ->orderByDesc('tanggalmasuk');
@@ -320,6 +348,10 @@ class ServicesController extends Controller
     public function validasiStock(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Services::where('status', 'Validasi')
                 ->where('pemilik', 'stock')
                 ->orderByDesc('tanggalmasuk');
@@ -384,6 +416,10 @@ class ServicesController extends Controller
     public function selesaiStock(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Services::where('status', 'Selesai')
                 ->where('pemilik', 'stock')
                 ->orderByDesc('tanggalselesai');

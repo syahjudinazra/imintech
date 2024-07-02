@@ -11,52 +11,71 @@ class StocksController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $stock = Stocks::paginate(10);
+        try {
+            // Check if user is authenticated
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
 
-        $formattedStocks = $stock->map(function ($stock) {
+            // Fetch paginated stocks
+            $stock = Stocks::paginate(10);
 
-            return [
-                'id' => $stock->id,
-                'serialnumber' => $stock->serialnumber,
-                'stocksdevice' => [
-                    'id' => $stock->stockTipe->id,
-                    'name' => $stock->stockTipe->name
-                ],
-                'stockssku' => [
-                    'id' => $stock->stocksKeeping->id,
-                    'name' => $stock->stocksKeeping->name
-                ],
-                'noinvoice' => $stock->noinvoice,
-                'tanggalmasuk' => $stock->tanggalmasuk,
-                'tanggalkeluar' => $stock->tanggalkeluar,
-                'pelanggan' => $stock->pelanggan,
-                'lokasi' => $stock->lokasi,
-                'keterangan' => $stock->keterangan,
-                'status' => $stock->status,
-                'created_at' => $stock->created_at,
-                'updated_at' => $stock->updated_at,
-                'deleted_at' => $stock->deleted_at,
-            ];
-        });
+            // Format stocks data
+            $formattedStocks = $stock->map(function ($stock) {
+                return [
+                    'id' => $stock->id,
+                    'serialnumber' => $stock->serialnumber,
+                    'stocksdevice' => [
+                        'id' => $stock->stockTipe->id,
+                        'name' => $stock->stockTipe->name
+                    ],
+                    'stockssku' => [
+                        'id' => $stock->stocksKeeping->id,
+                        'name' => $stock->stocksKeeping->name
+                    ],
+                    'noinvoice' => $stock->noinvoice,
+                    'tanggalmasuk' => $stock->tanggalmasuk,
+                    'tanggalkeluar' => $stock->tanggalkeluar,
+                    'pelanggan' => $stock->pelanggan,
+                    'lokasi' => $stock->lokasi,
+                    'keterangan' => $stock->keterangan,
+                    'status' => $stock->status,
+                    'created_at' => $stock->created_at,
+                    'updated_at' => $stock->updated_at,
+                    'deleted_at' => $stock->deleted_at,
+                ];
+            });
 
-        // Return JSON response
-        return response()->json([
-            'messages' => 'Data ditemukan',
-            'data' => $formattedStocks,
-            'meta' => [
-                'current_page' => $stock->currentPage(),
-                'last_page' => $stock->lastPage(),
-                'per_page' => $stock->perPage(),
-                'total' => $stock->total(),
-            ]
-        ]);
+            // Return JSON response with formatted data and pagination meta
+            return response()->json([
+                'messages' => 'Data ditemukan',
+                'data' => $formattedStocks,
+                'meta' => [
+                    'current_page' => $stock->currentPage(),
+                    'last_page' => $stock->lastPage(),
+                    'per_page' => $stock->perPage(),
+                    'total' => $stock->total(),
+                ]
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'messages' => 'Terjadi kesalahan',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function gudang(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Stocks::where('status', 'Gudang')
                 ->orderByDesc('created_at');
 
@@ -121,6 +140,10 @@ class StocksController extends Controller
     public function diservice(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Stocks::where('status', 'Diservice')
                 ->orderByDesc('created_at');
 
@@ -185,6 +208,10 @@ class StocksController extends Controller
     public function dipinjam(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Stocks::where('status', 'Dipinjam')
                 ->orderByDesc('created_at');
 
@@ -249,6 +276,10 @@ class StocksController extends Controller
     public function terjual(Request $request)
     {
         try {
+            if (!$request->user()) {
+                return response()->json(['message' => 'Kamu tidak dapat mengakses halaman ini, Silahkan login terlebih dahulu!'], 403);
+            }
+
             $query = Stocks::where('status', 'Terjual')
                 ->orderByDesc('created_at');
 
