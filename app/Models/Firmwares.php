@@ -20,7 +20,5 @@ class Firmwares extends Model
         'android',
         'flash',
         'ota',
-        'kategori',
-        'gambar',
     ];
 }

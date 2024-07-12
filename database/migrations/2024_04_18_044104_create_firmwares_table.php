@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('tipe');
             $table->string('versi');
             $table->string('android');
-            $table->string('flash');
-            $table->string('ota');
-            $table->string('kategori');
-            $table->string('gambar', 255);
+            $table->string('flash')->nullable();
+            $table->string('ota')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
